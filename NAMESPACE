@@ -1,0 +1,5 @@
+export(analyze.coalescent, analyze.sequences, mstree, read.gtree.samples, read.sptree.samples, read.starbeast)
+S3method(plot, coalescentteststats)
+S3method(plot, sequenceteststats)
+S3method(summary, coalescentteststats)
+S3method(summary, sequenceteststats)

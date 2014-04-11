@@ -1,0 +1,12 @@
+Package: starbeastPPS
+Type: Package
+Title: A posterior predictive check for the multispecies coalescent
+        model implemented in *BEAST
+Version: 1.0
+Date: 2012-12-02
+Author: Noah Reid
+Maintainer: Noah Reid <noah.reid@gmail.com>
+Depends: R (>= 2.10), ape (>= 3.0), phangorn
+Description: This package was written to check the fit of the multispecies coalescent model implemented in *BEAST (Heled and Drummond 2010) to empirical data. It uses posterior predictive simulation to test whether or not the posterior distribution adequately characterizes the data used to generate it. If it does not, this can be a sign that processes other than stochastic coalescence (such as migration, selection, gene duplication/extinction have shaped individual gene genealogies, or that species assignments have been made incorrectly. If these processes have shaped the data, they can cause *BEAST to return misleading phylogenetic estimates. They are also of fundamental interest to biologists, so poor fit can be a sign that something interesting and worth further investigation is going on in the system. This package was developed along with a meta-analysis of empirical data and was been submitted to Systematic Biology in Dec. 2012 (Reid et al.). For more information on posterior predictive simulation, see Gelman et al.'s book Bayesian Data Analysis. 
+License: GPLv3
+Packaged: 2012-12-03 03:51:15 UTC; noahreid
