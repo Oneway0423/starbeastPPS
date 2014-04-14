@@ -69,6 +69,7 @@ function(file){
 		for(i in 1:length(tree)){
 #			tree[[i]][["check"]]<-as.numeric(branchdata[[i]][,2])
 			tree[[i]][["dmt"]]<-as.numeric(branchdata[[i]][,3])
+                        tree[[i]][["dmv"]]<-as.numeric(branchdata[[i]][,3])
 			tree[[i]][["dmv_start"]]<-as.numeric(branchdata[[i]][,4])
 			tree[[i]][["dmv_end"]]<-as.numeric(branchdata[[i]][,5])
 			}
@@ -76,6 +77,7 @@ function(file){
 		if(class(tree)=="phylo"){
 #			tree[["check"]]<-as.numeric(branchdata[[1]][,2])
 			tree[["dmt"]]<-as.numeric(branchdata[[1]][,3])
+                        tree[["dmv"]]<-as.numeric(branchdata[[1]][,3])
 			tree[["dmv_start"]]<-as.numeric(branchdata[[1]][,4])
 			tree[["dmv_end"]]<-as.numeric(branchdata[[1]][,5])
 			}
