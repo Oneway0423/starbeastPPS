@@ -35,10 +35,10 @@ function(sptree, gtree, association, ploidy=1){
 		return(pruned)
 		}
 	#####end subfunction
-	#####prepare branch demographic info...
+	#####prepare branch demographic info...        
 	demo.maker<-function(sptree, nspec){
 		demo<-cbind(sptree$edge[,2], sptree$edge.length)
-		demo<-rbind(demo, c((nspec+1), Inf))
+		demo<-rbind(demo, c((nspec+1), Inf))                
 		demo<-cbind(demo, sptree$dmv)
 		demo<-demo[order(demo[,1]),]
 		sbt<-branching.times(sptree)
@@ -61,8 +61,8 @@ function(sptree, gtree, association, ploidy=1){
 		gbt<-cbind(gbt, length(gbt):1)
 		start<-demo[node,"sbt"]
 		end<-(demo[node, "sbt"]+demo[node, "length"])
-		enter<-gbt[gbt[,1]==max(gbt[gbt[,1]<=start,1]),2]
-		exit<-gbt[gbt[,1]==max(gbt[gbt[,1]<=end,1]),2]
+		enter<-gbt[gbt[,1]==max(gbt[gbt[,1]<=start,1]),2][1]  ## need to double check that adding [1]
+		exit<-gbt[gbt[,1]==max(gbt[gbt[,1]<=end,1]),2][1]     ##   actually does what's expected!
 		
 		####this "if" is made irrelevant by ignoring one-tip species below. 
 		if(start==1){
@@ -70,9 +70,12 @@ function(sptree, gtree, association, ploidy=1){
 			}
 		else{
 			gbt<-gbt[gbt[,1]>=start & gbt[,1]<=end,]
+                        
 			if(start!=0){	
 				gbt<-rbind(c(start, enter), gbt, c(end, exit))
-				}else{gbt<-rbind(gbt, c(end, exit))}
+                        else{
+                            gbt<-rbind(gbt, c(end, exit))
+                        }
 				
 			waits<-gbt[2:length(gbt[,1]), 1]-gbt[1:length(gbt[,1])-1, 1]
 			waits<-cbind(waits, gbt[1:length(gbt[,1])-1, 2])
