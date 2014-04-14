@@ -60,13 +60,16 @@ function(file){
 		}    
 
 	branchdata<-lapply(X, extract.order.stats)
-	
+        
 	#######append branch rate stats to trees.  
 
 	if(class(tree)=="multiPhylo"){
 	for(i in 1:length(tree)){
-		mode(branchdata[[i]])<-"numeric"
-		tree[[i]][["rate"]]<-as.matrix(branchdata[[i]][,c(-1,-2)])
+                rateMat <- branchdata[[i]][, c(-1, -2), drop=FALSE]
+                rateMat <- apply(rateMat, 2, function(x) gsub("(.+)\\.([0-9]+\\.[0-9]+E?-?[0-9]?)$", "\\2", x))
+                rateMat <- as.numeric(rateMat)
+		tree[[i]][["rate"]] <- as.matrix(rateMat)
+                options(warn=1)
 		}
 		}
 	if(class(tree)=="phylo"){
