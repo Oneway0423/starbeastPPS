@@ -1,10 +1,3 @@
-	node.tips<-function (phy, node){
- 		n<- length(phy$tip.label)
- 		if (node<= n){node}else{
- 			l<- numeric()
- 			d<- phy$edge[which(phy$edge[,1]==node),2]
- 			for(j in d){if(j<= n){l<- c(l, j)}else{l<-c(l, node.tips(phy,j))}}
-         	l}}
 ##' takes a species tree of object 'phylo' with a vector giving branch
 ##' effective population sizes and simulates a coalescent
 ##' genealogy. this is used internally, but may be useful for some
@@ -40,6 +33,24 @@
 ##' @author Noah Reid, Francois Michonneau
 mstree <- function(phy, msdir, nseq, nreps, samplescheme, ploidy = 1) {
 
+    ### gets tip labels for descendents of node in phy
+    node.tips <- function(phy, node) {
+        n <- length(phy$tip.label)
+        if (node <= n) {
+            node
+        } else {
+            d <- phy$edge[which(phy$edge[, 1] == node), 2]
+            l <- numeric(length(d))
+            for (j in seq_len(d)) {
+                if (j <= n) {
+                  l[j] <- j
+                } else {
+                  l[j] <- node.tips(phy, j)
+                }
+            }
+            l
+        }
+    }
 
     nspec <- length(phy$tip.label)
 
