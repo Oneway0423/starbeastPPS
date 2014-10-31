@@ -62,16 +62,16 @@ read.gtree.samples <- function(file) {
 
     ####### append branch rate stats to trees.
 
-        for (i in 1:length(tree)) {
-            rateMat <- branchdata[[i]][, c(-1, -2), drop = FALSE]
-            rateMat <- apply(rateMat, 2, function(x) {
     if (length(tree) > 1) {
+        tree <- mapply(function(tr, mat) {
+            mat <- mat[, c(-1, -2), drop=FALSE]
+            mat <- apply(mat, 2, function(x) {
                 as.numeric(gsub("(.+)\\.([0-9]+\\.[0-9]+E?-?[0-9]?)$",
                                 "\\2", x))
             })
-            tree[[i]][["rate"]] <- rateMat
-        }
-    }
+            tr[["rate"]] <- mat
+            tr
+        }, tr=tree, mat=branchdata, SIMPLIFY=FALSE)
     } else {
         mode(branchdata[[1]]) <- "numeric"
         tree[["rate"]] <- as.numeric(branchdata[[1]][, c(-1, -2)])
