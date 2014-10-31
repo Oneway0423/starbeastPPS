@@ -33,12 +33,9 @@ read.gtree.samples <- function(file) {
         Ysub <- unlist(strsplit(Ysub, ",|)"))
         Ysub <- gsub("\\(|\\)|;|\\[|\\]", "", Ysub)
 
-        branchdata <- array(dim = c(length(meta), 2 + metacols))
-
-        for (i in 1:length(meta)) {
-            branchdata[i, ] <- c(unlist(strsplit(Ysub[i], ":")),
-                                 unlist(strsplit(meta[i], ",")))
-        }
+        brlen <- do.call("rbind", strsplit(Ysub, ":"))
+        brrate <- do.call("rbind", strsplit(meta, ","))
+        branchdata <- cbind(brlen, brrate)
 
         if (metacols == 1) {
             colnames(branchdata) <- c("br", "length", "rate")
