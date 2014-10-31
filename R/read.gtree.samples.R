@@ -45,8 +45,8 @@ read.gtree.samples <- function(file) {
         string <- gsub("\\[[^]]*\\]", "", Y)
 
         stree <- read.tree(text = string)
-        translate <- cbind(stree$node.label[-1], (ntax + 2):edges[length(edges)])
-        translate <- rbind(translate, cbind(stree$tip.label, 1:ntax))
+        translate <- cbind(c(stree$node.label[-1], stree$tip.label),
+                           c((ntax + 2):edges[length(edges)], 1:ntax))
 
         rownames(translate) <- translate[, 2]
         translate2 <- translate[as.character(stree$edge[, 2]), ]
