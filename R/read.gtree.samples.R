@@ -1,7 +1,6 @@
 read.gtree.samples <- function(file) {
     ##### parts of this function were adapted from a function in package 'phyloch',
     ##### written by Christoph Heibl read in trees without stats
-    tree <- read.nexus(file)
 
     ##### get tree strings
     X <- scan(file = file, what = "", sep = "\n", quiet = TRUE)
@@ -57,25 +56,26 @@ read.gtree.samples <- function(file) {
         branchdata2 <- branchdata[translate2[, 1], ]
 
         rownames(branchdata2) <- NULL
-        return(branchdata2)
+        list(tree=stree, branchdata=branchdata2)
 
     }
-
-    branchdata <- lapply(X, extract.order.stats)
+    tree_info <- lapply(X, extract.order.stats)
+    tree <- lapply(tree_info, function(x) x$tree)
+    branchdata <- lapply(tree_info, function(x) x$branchdata)
 
     ####### append branch rate stats to trees.
 
-    if (class(tree) == "multiPhylo") {
         for (i in 1:length(tree)) {
             rateMat <- branchdata[[i]][, c(-1, -2), drop = FALSE]
             rateMat <- apply(rateMat, 2, function(x) {
+    if (length(tree) > 1) {
                 as.numeric(gsub("(.+)\\.([0-9]+\\.[0-9]+E?-?[0-9]?)$",
                                 "\\2", x))
             })
             tree[[i]][["rate"]] <- rateMat
         }
     }
-    if (class(tree) == "phylo") {
+    } else {
         mode(branchdata[[1]]) <- "numeric"
         tree[["rate"]] <- as.numeric(branchdata[[1]][, c(-1, -2)])
     }
