@@ -3,9 +3,15 @@ read.gtree.samples <- function(file) {
     ##### written by Christoph Heibl read in trees without stats
 
     ##### get tree strings
-    X <- scan(file = file, what = "", sep = "\n", quiet = TRUE)
-    X <- X[grep("tree STATE", X)]
+    TREE <- scan(file = file, what = "", sep = "\n", quiet = TRUE)
+    X <- TREE[grep("tree STATE", TREE)]
     X <- gsub("tree STATE_.*\\[&R\\] ", "", X)
+
+    ## Get translation table
+    trans_beg <- grep("Translate", TREE)
+    trans_end <- grep(";", TREE)[which(grep(";", TREE) > trans_beg)[1]]
+    trans_tab <- read.table(file=file, skip=trans_beg+1, nrows=(trans_end-trans_beg-1))
+    trans_tab$Translate <- gsub(",$", "", trans_tab$Translate)
 
     ###### a function to produce branch rate vectors and order them appropriately
 
@@ -15,7 +21,6 @@ read.gtree.samples <- function(file) {
         edges <- (ntax + 2):((2 * ntax) - 1)
 
         Y <- treestring
-
 
         #### adds internal node labels
         for (i in 1:length(edges)) {
@@ -51,8 +56,10 @@ read.gtree.samples <- function(file) {
         rownames(translate) <- translate[, 2]
         translate2 <- translate[as.character(stree$edge[, 2]), ]
         branchdata2 <- branchdata[translate2[, 1], ]
-
         rownames(branchdata2) <- NULL
+
+        stree$tip.label <- trans_tab[stree$tip.label, "Translate"]
+
         list(tree=stree, branchdata=branchdata2)
 
     }
