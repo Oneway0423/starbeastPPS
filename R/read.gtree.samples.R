@@ -68,11 +68,11 @@ read.gtree.samples <- function(file) {
     if (class(tree) == "multiPhylo") {
         for (i in 1:length(tree)) {
             rateMat <- branchdata[[i]][, c(-1, -2), drop = FALSE]
-            rateMat <- apply(rateMat, 2, function(x) gsub("(.+)\\.([0-9]+\\.[0-9]+E?-?[0-9]?)$", 
-                "\\2", x))
-            rateMat <- as.numeric(rateMat)
-            tree[[i]][["rate"]] <- as.matrix(rateMat)
-            options(warn = 1)
+            rateMat <- apply(rateMat, 2, function(x) {
+                as.numeric(gsub("(.+)\\.([0-9]+\\.[0-9]+E?-?[0-9]?)$",
+                                "\\2", x))
+            })
+            tree[[i]][["rate"]] <- rateMat
         }
     }
     if (class(tree) == "phylo") {
